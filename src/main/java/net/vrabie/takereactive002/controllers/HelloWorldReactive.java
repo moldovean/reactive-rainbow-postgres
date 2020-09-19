@@ -1,9 +1,12 @@
 package net.vrabie.takereactive002.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.vrabie.takereactive002.data.Reservation;
 import net.vrabie.takereactive002.repos.RegistrationRepo;
 import net.vrabie.takereactive002.repos.ReservationRepo;
+import net.vrabie.takereactive002.services.DbClientServiceExample;
+import net.vrabie.takereactive002.services.ReservationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,16 +14,16 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
-
-import static java.time.temporal.ChronoUnit.MILLIS;
 
 @RestController
 @RequiredArgsConstructor
+@Log4j2
 public class HelloWorldReactive {
-    private final RegistrationRepo registrationRepo;
     private final ReservationRepo reservationRepo;
+    private final DbClientServiceExample dbClientServiceExample;
+    private final ReservationService reservationService;
+
     @GetMapping("/hello")
     public Mono<String> helloWorld() {
         return Mono.just("Hello World Take 2");
@@ -40,8 +43,14 @@ public class HelloWorldReactive {
     @GetMapping("/test2")
     public Flux<String> helloReactivePostgresTest() {
         return reservationRepo.findAll()
-                .map(reservation -> reservation.getName()+" ")
+                .map(reservation -> reservation.getName() + " ")
                 .delayElements(Duration.ofMillis(500));
+    }
+
+    @GetMapping("/test3")
+    public Flux<Reservation> getReservationsFromService() {
+        return dbClientServiceExample.getAllReservations()
+                .doOnComplete(()-> log.info("/test3 was called and finished! -------"));
     }
 
     @GetMapping("/helloReactive")
@@ -52,6 +61,12 @@ public class HelloWorldReactive {
                 .delayElements(Duration.ofMillis(1200));
     }
 
+    @GetMapping("/reservations")
+    public Flux<Reservation> makeSomeReservations() {
+
+        return reservationService.saveSomeReservationsService()
+                .delayElements(Duration.ofMillis(600));
+    }
 
 
 }
