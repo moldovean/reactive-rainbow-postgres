@@ -64,8 +64,7 @@ public class HelloWorldReactive {
     @GetMapping("/reservations")
     public Flux<Reservation> makeSomeReservations() {
 
-        return reservationService.saveSomeReservationsService()
-                .delayElements(Duration.ofMillis(600));
+        return reservationService.saveSomeReservationsService("Adrian2", "Eugene Ciorba", "itya");
     }
 
 
