@@ -1,8 +1,7 @@
 package net.vrabie.takereactive002.services;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import net.vrabie.takereactive002.daos.GreetingsRequest;
+import net.vrabie.takereactive002.daos.GreetingsResponse;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -12,24 +11,12 @@ import java.util.stream.Stream;
 
 @Service
 public class GreetingsService {
-    Flux<GreetingsResponse> greet(GreetingsRequest greetingsRequest) {
+    public Flux<GreetingsResponse> greet(GreetingsRequest greetingsRequest) {
         return Flux.fromStream(Stream.generate(() ->
                 new GreetingsResponse("Hello " + greetingsRequest.getName() + " @ " + Instant.now())))
-                .delayElements(Duration.ofMillis(600));
+                .delayElements(Duration.ofMillis(600))
+                .limitRequest(10);
 
     }
 }
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class GreetingsRequest {
-    private String name;
-}
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class GreetingsResponse {
-    private String name;
-}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>My Title</title>
+</head>
+<body>
+<h1>Hello World!</h1>
+<script>
+    window.addEventListener('load', function (event) {
+        var ws = new WebSocket('ws://localhost:8080/ws/greetings')
+        ws.addEventListener("open", function (event) {
+            ws.send("Inna");
+        });
+        ws.addEventListener("message", function (event) {
+            console.log(event.data);
+
+        });
+    });
+</script>
+</body>
+</html>

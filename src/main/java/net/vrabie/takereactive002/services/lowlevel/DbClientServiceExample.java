@@ -1,4 +1,4 @@
-package net.vrabie.takereactive002.services;
+package net.vrabie.takereactive002.services.lowlevel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 public class DbClientServiceExample {
     private final DatabaseClient databaseClient;
 
+    //using low level DatabaseClient which also looks good
     public Flux<Reservation> getAllReservations() {
         return databaseClient.select()
                 .from("reservation")
