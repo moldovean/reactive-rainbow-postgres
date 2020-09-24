@@ -14,8 +14,9 @@ public class GreetingsService {
     public Flux<GreetingsResponse> greet(GreetingsRequest greetingsRequest) {
         return Flux.fromStream(Stream.generate(() ->
                 new GreetingsResponse("Hello " + greetingsRequest.getName() + " @ " + Instant.now())))
-                .delayElements(Duration.ofMillis(600))
-                .limitRequest(10);
+                .delayElements(Duration.ofMillis(300))
+                .limitRequest(10)
+                ;
 
     }
 }
